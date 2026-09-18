@@ -1,15 +1,16 @@
 const { Pool } = require('pg');
+require('dotenv').config();
 
 const pool = new Pool({
-  user: 'postgres',       
-  host: 'localhost',      
-  database: 'bibliotheque', 
-  password: 'NouveauMotDePasse123!',   
-  port: 5432,             
+  user: process.env.DB_USER || 'postgres',
+  host: process.env.DB_HOST || 'localhost',
+  database: process.env.DB_NAME || 'bibliotheque',
+  password: process.env.DB_PASSWORD || 'NouveauMotDePasse123!',
+  port: process.env.DB_PORT || 5432,
 });
 
 pool.connect()
   .then(() => console.log('✅ Connecté à la BDD bibliotheque'))
-  .catch(err => console.error('❌ Erreur connexion', err));
+  .catch(err => console.error('❌ Erreur connexion', err.message));
 
 module.exports = pool;

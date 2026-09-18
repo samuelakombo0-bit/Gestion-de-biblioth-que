@@ -1,4 +1,4 @@
-const express = require('express');
+
 const pool = require('../db');
 
 const getAutheur = async (req, res) => {
@@ -23,7 +23,7 @@ const createAutheur = async (req, res) => {
         const { nom, nationalite, date_naissance } = req.body;
 
         const result = await pool.query(
-            `INSERT INTO auteur (nom, nationalite, date_naissance)
+            `INSERT INTO auteurs (nom, nationalite, date_naissance)
              VALUES ($1, $2, $3)
              RETURNING *`,
             [nom, nationalite, date_naissance]
@@ -64,7 +64,7 @@ const deleteAuteur = async (req, res) =>{
         const { id } = req.params; // celui que l'on veux supprimer
 
         const result = await pool.query(
-            `DELETE FROM auteyrs WHERE id = $1 RETURNING *`, //  On supprime
+            `DELETE FROM auteurs WHERE id = $1 RETURNING *`, //  On supprime
             [id]
         );
 

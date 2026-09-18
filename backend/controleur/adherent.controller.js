@@ -9,6 +9,7 @@ const getAdherents = async (req, res) => {
         res.status(500).json({ error: err.message });
     }
 };
+// je dois reverifier la gestion des erreurs 
 
 const createAdherent = async (req, res) => {
     try {
