@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+
+    <meta charset="UTF-8">
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0" >
+
+    <title>Bibliothèque - Adhérents</title>
+
+    <link rel="stylesheet" href="css/style.css">
+
+</head>
+
+
+<body>
+
+<header class="header">
+
+    <div class="logo">
+        📚 <span>Ma Bibliothèque</span>
+    </div>
+
+
+    <nav>
+
+        <a href="index.html">Tableau de bord</a>
+        <a href="livres.html">Livres</a>
+        <a href="autheur.html">Auteurs</a>
+        <a href="adherents.html" class="active">
+            Adhérents
+        </a>
+        <a href="emprunt.html">Emprunts</a>
+
+    </nav>
+
+</header>
+
+
+<main class="container">
+
+    <section class="page-header">
+
+        <div>
+
+            <h1>Gestion des adhérents</h1>
+
+            <p>
+                Gérez les membres inscrits à la bibliothèque.
+            </p>
+
+        </div>
+
+
+        <button
+            class="btn btn-primary"
+            id="btn-ajouter-adherent"
+        >
+            + Ajouter un adhérent
+        </button>
+
+    </section>
+
+
+    <section class="card">
+
+        <div class="card-header">
+
+            <h2>Liste des adhérents</h2>
+
+            <span class="badge">
+                <span id="nombre-adherents"></span> adhérents
+            </span>
+
+        </div>
+
+
+        <div class="table-container">
+
+            <table>
+
+                <thead>
+
+                    <tr>
+
+                        <th>ID</th>
+                        <th>Nom</th>
+                        <th>Téléphone</th>
+                        <th>Email</th>
+                        <th>Actions</th>
+
+                    </tr>
+
+                </thead>
+
+
+                <tbody id="liste-adherents">
+
+                    <!-- Données injectées avec JS -->
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+    </section>
+
+</main>
+
+
+<!-- MODAL -->
+
+<div class="modal" id="modal-adherent">
+
+    <div class="modal-content">
+
+        <div class="modal-header">
+
+            <h2>Ajouter un adhérent</h2>
+
+            <button class="close-btn">
+                &times;
+            </button>
+
+        </div>
+
+
+        <form id="form-adherent">
+
+            <div class="form-group">
+
+                <label for="nom-adherent">
+                    Nom
+                </label>
+
+                <input
+                    type="text"
+                    id="nom-adherent"
+                    placeholder="Nom complet"
+                    required
+                >
+
+            </div>
+
+
+            <div class="form-group">
+
+                <label for="telephone">
+                    Téléphone
+                </label>
+
+                <input
+                    type="tel"
+                    id="telephone"
+                    placeholder="06 XX XX XX XX"
+                    required
+                >
+
+            </div>
+
+
+            <div class="form-group">
+
+                <label for="email">
+                    Email
+                </label>
+
+                <input
+                    type="email"
+                    id="email"
+                    placeholder="exemple@gmail.com"
+                >
+
+            </div>
+
+
+            <div class="form-actions">
+
+                <button
+                    type="button"
+                    class="btn btn-secondary"
+                >
+                    Annuler
+                </button>
+
+                <button
+                    type="submit"
+                    class="btn btn-primary"
+                >
+                    Ajouter
+                </button>
+
+            </div>
+
+        </form>
+
+    </div>
+
+</div>
+
+
+<script src="js/app.js"></script>
+
+</body>
+
+</html>

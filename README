@@ -1,0 +1,469 @@
+# 📚 Gestion Bibliothèque
+
+Application web de gestion d'une bibliothèque de quartier.
+
+Le projet permet au personnel de gérer les **auteurs**, les **livres**, les **adhérents** et les **emprunts**, avec un tableau de bord présentant les principales statistiques de la bibliothèque.
+
+Le projet a été réalisé avec **Node.js, Express.js, PostgreSQL, HTML, CSS et JavaScript**.
+
+---
+
+## 🚀 Fonctionnalités
+
+### Auteurs
+
+* Ajouter un auteur
+* Consulter les auteurs
+* Modifier un auteur
+* Supprimer un auteur
+
+### Adhérents
+
+* Ajouter un adhérent
+* Consulter les adhérents
+* Modifier un adhérent
+* Supprimer un adhérent
+* Consulter les emprunts d'un adhérent
+
+### Livres
+
+* Ajouter un livre
+* Consulter les livres
+* Modifier un livre
+* Supprimer un livre
+* Associer un livre à un auteur
+* Rechercher un livre
+* Pagination des résultats
+* Gestion de la disponibilité du livre
+
+### Emprunts
+
+* Enregistrer un emprunt
+* Vérifier la disponibilité d'un livre
+* Définir une date de retour prévue
+* Enregistrer le retour d'un livre
+* Détecter les emprunts en retard
+* Mettre automatiquement à jour la disponibilité du livre
+
+### Tableau de bord
+
+Le tableau de bord affiche notamment :
+
+* Nombre total de livres
+* Nombre total d'adhérents
+* Nombre d'emprunts en cours
+* Nombre d'emprunts en retard
+* Livre le plus emprunté
+* Adhérent le plus actif
+
+---
+
+# 🛠️ Technologies utilisées
+
+### Backend
+
+* Node.js
+* Express.js
+* PostgreSQL
+* `pg`
+* JavaScript
+
+### Frontend
+
+* HTML5
+* CSS3
+* JavaScript Vanilla
+* Fetch API
+
+### Tests
+
+* Postman
+
+---
+
+# 📁 Structure du projet
+
+```text
+Gestion bibliothèque/
+│
+├── controllers/
+│   ├── auteurs.controller.js
+│   ├── adherents.controller.js
+│   ├── livres.controller.js
+│   └── emprunts.controller.js
+│
+├── route/
+│   ├── autheur.route.js
+│   ├── adherent.route.js
+│   ├── livre.route.js
+│   ├── emprunt.route.js
+│   └── statistiques.route.js
+│
+├── middleware/
+│   ├── logger.js
+│   ├── validation.js
+│   └── errorHandler.js
+│
+├── css/
+│   └── style.css
+│
+├── js/
+│   └── app.js
+│
+├── index.html
+├── livres.html
+├── autheur.html
+├── adherents.html
+├── emprunt.html
+│
+├── db.js
+├── main.js
+├── package.json
+├── .env
+├── .env.example
+└── README.md
+```
+
+---
+
+# 🗄️ Modélisation de la base de données
+
+La base de données repose sur quatre tables principales :
+
+```text
+AUTEURS
+   │
+   │ 1
+   │
+   │ N
+LIVRES
+   │
+   │ 1
+   │
+   │ N
+EMPRUNTS
+   │
+   │ N
+   │
+   │ 1
+ADHERENTS
+```
+
+## Auteurs
+
+La table `auteurs` contient les informations concernant les auteurs des livres.
+
+Principales informations :
+
+* `id`
+* `nom`
+* `nationalite`
+
+Un auteur peut avoir plusieurs livres.
+
+**Relation :**
+
+```text
+auteurs 1 ─────── N livres
+```
+
+---
+
+## Livres
+
+La table `livres` représente les ouvrages disponibles dans la bibliothèque.
+
+Elle contient notamment :
+
+* `id`
+* `titre`
+* `auteur_id`
+* `annee_publication`
+* `statut`
+
+`auteur_id` est une clé étrangère qui permet d'associer chaque livre à son auteur.
+
+Le champ `statut` permet de savoir si le livre est :
+
+```text
+disponible
+```
+
+ou
+
+```text
+emprunte
+```
+
+---
+
+## Adhérents
+
+La table `adherents` représente les personnes inscrites à la bibliothèque.
+
+Elle contient notamment :
+
+* `id`
+* `nom`
+* `tel`
+* `email`
+
+Un adhérent peut effectuer plusieurs emprunts au cours du temps.
+
+**Relation :**
+
+```text
+adherents 1 ─────── N emprunts
+```
+
+---
+
+## Emprunts
+
+La table `emprunts` permet d'enregistrer chaque opération d'emprunt.
+
+Elle contient notamment :
+
+* `id`
+* `adherent_id`
+* `livre_id`
+* `date_emprunt`
+* `date_retour_prevue`
+* `date_retour`
+* `statut`
+
+Les clés étrangères permettent de relier un emprunt à :
+
+* un adhérent ;
+* un livre.
+
+```text
+adherent ───────< emprunt >─────── livre
+```
+
+Un adhérent peut donc avoir plusieurs emprunts et un livre peut apparaître dans plusieurs emprunts au cours de son historique.
+
+---
+
+# 🧠 Choix de modélisation
+
+Le modèle a été conçu autour des principales règles métier de l'application.
+
+### 1. Séparation des entités
+
+Les auteurs, livres, adhérents et emprunts sont séparés dans différentes tables afin d'éviter de répéter inutilement les mêmes informations.
+
+Par exemple, le nom d'un auteur n'est pas directement enregistré dans chaque livre.
+
+On conserve plutôt :
+
+```text
+livres.auteur_id → auteurs.id
+```
+
+Cela permet de modifier les informations d'un auteur sans devoir modifier tous ses livres.
+
+### 2. Utilisation des clés étrangères
+
+Les clés étrangères garantissent la cohérence des relations entre les données.
+
+Exemple :
+
+```text
+livres.auteur_id
+        ↓
+auteurs.id
+```
+
+et :
+
+```text
+emprunts.adherent_id
+        ↓
+adherents.id
+```
+
+```text
+emprunts.livre_id
+        ↓
+livres.id
+```
+
+### 3. Historique des emprunts
+
+Les emprunts sont conservés dans une table indépendante plutôt que simplement enregistrés dans le livre.
+
+Cela permet de conserver l'historique :
+
+```text
+Adhérent
+   ↓
+Emprunt 1 → Livre A
+Emprunt 2 → Livre B
+Emprunt 3 → Livre A
+```
+
+On peut ainsi savoir quels livres ont été empruntés, par qui et à quelles dates.
+
+### 4. Gestion du statut
+
+Le livre possède un statut permettant de déterminer rapidement s'il est disponible.
+
+Lorsqu'un emprunt est créé :
+
+```text
+disponible → emprunte
+```
+
+Lorsqu'un livre est retourné :
+
+```text
+emprunte → disponible
+```
+
+Cette logique permet d'empêcher l'emprunt simultané d'un même exemplaire.
+
+### 5. Détection des retards
+
+Un emprunt est considéré comme en retard lorsque :
+
+```text
+date_retour_prevue < date actuelle
+```
+
+et que son statut est encore :
+
+```text
+en_cours
+```
+
+Cette règle est également utilisée par le tableau de bord.
+
+---
+
+# ⚙️ Installation
+
+## 1. Cloner le projet
+
+```bash
+git clone <URL_DU_REPOSITORY>
+cd "Gestion bibliothèque"
+```
+
+## 2. Installer les dépendances
+
+```bash
+npm install
+```
+
+## 3. Créer la base PostgreSQL
+
+Créer une base de données PostgreSQL dédiée au projet.
+
+Exemple :
+
+```sql
+CREATE DATABASE bibliotheque;
+```
+
+Puis exécuter le script SQL du projet afin de créer les tables.
+
+---
+
+# 🔐 Configuration des variables d'environnement
+
+Créer un fichier `.env` à la racine du backend.
+
+À partir du fichier `.env.example` :
+
+```bash
+copy .env.example .env
+```
+
+Sous Linux/macOS :
+
+```bash
+cp .env.example .env
+```
+
+Puis renseigner les informations PostgreSQL.
+
+### Exemple `.env.example`
+
+
+⚠️ Le fichier `.env` ne doit pas être envoyé sur GitHub.
+
+Ajouter `.env` dans `.gitignore` :
+
+```gitignore
+.env
+node_modules/
+```
+
+---
+
+# 🔌 Connexion PostgreSQL
+
+La connexion à PostgreSQL est réalisée avec le module `pg`.
+
+
+```
+
+---
+
+# ▶️ Lancer le serveur
+
+```bash
+node main.js
+```
+
+Si le serveur démarre correctement :
+
+```text
+Serveur lancé sur le port 4001
+```
+
+Le backend sera accessible sur :
+
+```text
+http://localhost:4001
+```
+
+---
+
+# 🔗 API
+
+Quelques endpoints principaux :
+
+```text
+GET    /auteurs
+POST   /auteurs
+PUT    /auteurs/:id
+DELETE /auteurs/:id
+
+GET    /adherents
+POST   /adherents
+PUT    /adherents/:id
+DELETE /adherents/:id
+
+GET    /livres
+POST   /livres
+PUT    /livres/:id
+DELETE /livres/:id
+
+GET    /emprunts
+POST   /emprunts
+PUT    /emprunts/:id/retour
+
+GET    /statistiques
+GET    /statistiques/populaires
+```
+
+
+---
+
+
+---
+
+
+
