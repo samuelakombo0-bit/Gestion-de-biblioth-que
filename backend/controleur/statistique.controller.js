@@ -26,7 +26,7 @@ router.get('/populaires', async (req, res) => {
     const livrePopulaire = await pool.query(`
       SELECT livres.titre, COUNT(*) as count
       FROM emprunts e
-      JOIN livres l ON e.livre_id = livres.id
+      JOIN livres  ON emprunts.livre_id = livres.id
       GROUP BY livres.id, livres.titre
       ORDER BY count DESC
       LIMIT 1
@@ -34,7 +34,7 @@ router.get('/populaires', async (req, res) => {
     const adherentActif = await pool.query(`
       SELECT auteurs.nom, COUNT(*) as count
       FROM emprunts auteurs
-      JOIN adherents auteurs ON e.adherent_id = auteurs.id
+      JOIN adherents auteurs ON emprunts.adherent_id = auteurs.id
       GROUP BY auteurs.id, auteurs.nom
       ORDER BY count DESC
       LIMIT 1
